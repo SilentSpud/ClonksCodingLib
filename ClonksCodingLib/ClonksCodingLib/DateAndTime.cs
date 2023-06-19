@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Globalization;
 
-namespace CCL {
+namespace CCL
+{
     /// <summary>
     /// Useful functions that has to do with Date and Time stuff.
     /// </summary>
-    public static class DateAndTime {
+    public static class DateAndTime
+    {
 
         public static string GetDateAndTimeStringForFileName()
         {

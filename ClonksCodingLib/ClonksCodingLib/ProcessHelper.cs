@@ -3,11 +3,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace CCL {
+namespace CCL
+{
     /// <summary>
     /// Some helper functions in use with <see cref="Process"/>.
     /// </summary>
-    public static class ProcessHelper {
+    public static class ProcessHelper
+    {
 
         #region DllImports
         [DllImport("user32.dll")]

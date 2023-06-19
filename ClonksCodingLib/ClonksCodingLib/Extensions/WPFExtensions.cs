@@ -1,7 +1,9 @@
 ﻿using System.Windows.Media;
 
-namespace CCL {
-    public static class WPFExtensions {
+namespace CCL
+{
+    public static class WPFExtensions
+    {
 
         /// <summary>
         /// Converts a <see cref="string"/> to a <see cref="SolidColorBrush"/>.

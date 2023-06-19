@@ -30,12 +30,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\ClonksCodingLib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -51,8 +53,10 @@
     <Compile Include="FileHelper.cs" />
     <Compile Include="GDI.cs" />
     <Compile Include="JsonHelper.cs" />
+    <Compile Include="ParseExtension.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateChecker.cs" />
     <Compile Include="URISchemeHandler.cs" />
     <Compile Include="Web.cs" />
     <Compile Include="WPFStuff.cs" />

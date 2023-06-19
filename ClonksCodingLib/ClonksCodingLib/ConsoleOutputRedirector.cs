@@ -2,14 +2,16 @@
 using System.IO;
 using System.Text;
 
-namespace CCL {
+namespace CCL
+{
     /// <summary>
     /// If you override the <see cref="System.Console.Out"/> property with a new instance of the <see cref="ConsoleOutputRedirector"/>
     /// you can subscribe to its <see cref="ConsoleOutputRedirector.OnLineAdded"/> event to be notified when a new line got written to the console using <see cref="System.Console.WriteLine(string)"/>.
     /// <br/><br/>
     /// You also have the possibility to view the history of the console using <see cref="ConsoleOutputRedirector.GetLines()"/>.
     /// </summary>
-    public class ConsoleOutputRedirector : TextWriter {
+    public class ConsoleOutputRedirector : TextWriter
+    {
 
         #region Variables
         private List<string> lines;

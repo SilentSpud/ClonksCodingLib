@@ -6,8 +6,31 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CCL {
-    public static class FileHelper {
+namespace CCL
+{
+    public static class FileHelper
+    {
+
+        public struct AFileSize
+        {
+            #region Properties
+            public long Size { get; private set; }
+            public string SizeCharacter { get; private set; }
+            #endregion
+
+            #region Constructor
+            public AFileSize(long size, string sizeCharacter)
+            {
+                Size = size;
+                SizeCharacter = sizeCharacter;
+            }
+            #endregion
+
+            public override string ToString()
+            {
+                return string.Format("{0} {1}", Size.ToString(), SizeCharacter.ToString());
+            }
+        }
 
         /// <summary>
         /// An array of all file sizes.
@@ -141,6 +164,21 @@ namespace CCL {
             return string.Format("{0} {1}", (Math.Sign(byteCount) * num).ToString(), FileSizesStrArr[place]);
         }
 
+        /// <summary>
+        /// Gets the exact file size from the given byte count.
+        /// </summary>
+        /// <param name="byteCount">The byte count to get the exact file size of.</param>
+        /// <returns>An object containing the file size with its corresponding character.</returns>
+        public static AFileSize GetExactFileSizeAdvanced(long byteCount)
+        {
+            if (byteCount == 0)
+                return new AFileSize(0, "B");
+
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return new AFileSize((long)(Math.Sign(byteCount) * num), FileSizesStrArr[place]);
+        }
 
     }
 }

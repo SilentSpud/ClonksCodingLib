@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Win32;
 
-namespace CCL {
+namespace CCL
+{
     /// <summary>
     /// Class to register or unregister URI Schemes.
     /// </summary>
-    public static class URISchemeHandler {
+    public static class URISchemeHandler
+    {
 
         public static AResult<bool> Register(string protocolName, string executablePath)
         {

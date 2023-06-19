@@ -1,7 +1,9 @@
 ﻿using System;
 
-namespace CCL {
-    public struct AResult<T> {
+namespace CCL
+{
+    public struct AResult<T>
+    {
 
         #region Properties
         public Exception Exception { get; private set; }

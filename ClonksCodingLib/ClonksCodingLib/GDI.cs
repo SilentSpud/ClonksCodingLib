@@ -3,11 +3,13 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.IO;
 
-namespace CCL {
+namespace CCL
+{
     /// <summary>
     /// Graphics stuff.
     /// </summary>
-    public static class GDI {
+    public static class GDI
+    {
 
         /// <summary>
         /// Takes a screenshot of the screen and saves the file.

@@ -3,11 +3,13 @@ using System.IO.Compression;
 using System.IO;
 using System.Text;
 
-namespace CCL {
+namespace CCL
+{
     /// <summary>
     /// Compression stuff.
     /// </summary>
-    public static class DataCompression {
+    public static class DataCompression
+    {
 
         #region Byte Array
         /// <summary>

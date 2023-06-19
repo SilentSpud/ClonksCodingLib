@@ -4,8 +4,10 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace CCL {
-    public class JsonHelper {
+namespace CCL
+{
+    public class JsonHelper
+    {
 
         /// <summary>
         /// Helper class for Newtonsoft.Json Library to ignore properties from serialization.

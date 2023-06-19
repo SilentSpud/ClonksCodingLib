@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Threading.Tasks;
+using System.Windows;
 
-namespace CCL {
-    public static class Web {
+namespace CCL
+{
+    /// <summary>Web related stuff.</summary>
+    public static class Web
+    {
 
         public static AResult<bool> CheckForInternetConnection(int timeoutMs = 10000, string urlOverride = null)
         {
@@ -68,6 +75,74 @@ namespace CCL {
         public static string GetYouTubeThumbnailURLFromVideoID(string id)
         {
             return string.Format("https://img.youtube.com/vi/{0}/0.jpg", id);
+        }
+
+        /// <summary>
+        /// Shows a messagebox that asks the user if he wants to navigate to the given webpage.
+        /// </summary>
+        /// <param name="uri">The Uri.</param>
+        /// <returns>True if the user wanted to navigate to the page, otherwise false.</returns>
+        public static AResult<bool> AskUserToGoToURL(Uri uri)
+        {
+            try
+            {
+                if (uri != null)
+                {
+                    switch (MessageBox.Show(string.Format("This link takes you to {0} ({1}). Do you want to go there?", uri.Host, uri.ToString()), "Open link?", MessageBoxButton.YesNo, MessageBoxImage.Question))
+                    {
+                        case MessageBoxResult.Yes:
+                            return new AResult<bool>(null, Process.Start(uri.ToString()) != null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new AResult<bool>(ex, false);
+            }
+            return new AResult<bool>(null, false);
+        }
+
+        /// <summary>
+        /// Gets the round trip time (Ping) from the specified hostname asynchronously.
+        /// <para>Does not lock up your application.</para>
+        /// </summary>
+        /// <param name="hostName">The target hostname to get the ping from.</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        public static Task<PingReply> GetPingAsync(string hostName)
+        {
+            using (Ping pingSender = new Ping())
+            {
+                return pingSender.SendPingAsync(hostName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the round trip time (Ping) from the specified hostname.
+        /// <para>Can and will lock up your application if called from the main thread.</para>
+        /// </summary>
+        /// <param name="hostName">The target hostname to get the ping from.</param>
+        /// <returns>A <see cref="AResult{T}"/> object that contains information if the operation failed or not. Returns the ping if successfully, or -1 if not.</returns>
+        public static AResult<long> GetPing(string hostName)
+        {
+            try
+            {
+                using (Ping pingSender = new Ping())
+                {
+                    PingReply reply = pingSender.Send(hostName);
+                    if (reply.Status == IPStatus.Success)
+                    {
+                        return new AResult<long>(null, reply.RoundtripTime);
+                    }
+                    else
+                    {
+                        return new AResult<long>(null, -1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new AResult<long>(ex, -1);
+            }
         }
 
     }

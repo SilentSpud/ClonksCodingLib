@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Media;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace CCL
 {
@@ -126,6 +128,71 @@ namespace CCL
                 return IntPtr.Zero;
             }
             #endregion
+        }
+
+        /// <summary>
+        /// Class that allows you to create a animation for a <see cref="Brush"/> instead of the <see cref="Color"/> (<see cref="ColorAnimation"/>).
+        /// </summary>
+        public class BrushAnimation : AnimationTimeline
+        {
+
+            public override Type TargetPropertyType
+            {
+                get {
+                    return typeof(Brush);
+                }
+            }
+
+            public override object GetCurrentValue(object defaultOriginValue, object defaultDestinationValue, AnimationClock animationClock)
+            {
+                return GetCurrentValue(defaultOriginValue as Brush, defaultDestinationValue as Brush, animationClock);
+            }
+            public object GetCurrentValue(Brush defaultOriginValue, Brush defaultDestinationValue, AnimationClock animationClock)
+            {
+                if (!animationClock.CurrentProgress.HasValue)
+                    return Brushes.Transparent;
+
+                // Use the standard values if From and To are not set 
+                // (it is the value of the given property)
+                defaultOriginValue = From ?? defaultOriginValue;
+                defaultDestinationValue = To ?? defaultDestinationValue;
+
+                if (animationClock.CurrentProgress.Value == 0)
+                    return defaultOriginValue;
+                if (animationClock.CurrentProgress.Value == 1)
+                    return defaultDestinationValue;
+
+                return new VisualBrush(new Border() {
+                    Width = 1,
+                    Height = 1,
+                    Background = defaultOriginValue,
+                    Child = new Border() {
+                        Background = defaultDestinationValue,
+                        Opacity = animationClock.CurrentProgress.Value,
+                    }
+                });
+            }
+
+            protected override Freezable CreateInstanceCore()
+            {
+                return new BrushAnimation();
+            }
+
+            // We must define From and To, AnimationTimeline does not have this properties
+            public Brush From
+            {
+                get { return (Brush)GetValue(FromProperty); }
+                set { SetValue(FromProperty, value); }
+            }
+            public Brush To
+            {
+                get { return (Brush)GetValue(ToProperty); }
+                set { SetValue(ToProperty, value); }
+            }
+
+            public static readonly DependencyProperty FromProperty = DependencyProperty.Register("From", typeof(Brush), typeof(BrushAnimation));
+            public static readonly DependencyProperty ToProperty = DependencyProperty.Register("To", typeof(Brush), typeof(BrushAnimation));
+
         }
 
         /// <summary>

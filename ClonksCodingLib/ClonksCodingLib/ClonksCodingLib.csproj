@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AResult.cs" />
     <Compile Include="ConsoleOutputRedirector.cs" />
+    <Compile Include="Culture.cs" />
     <Compile Include="DataCompression.cs" />
     <Compile Include="DateAndTime.cs" />
     <Compile Include="Extensions\WPFExtensions.cs" />

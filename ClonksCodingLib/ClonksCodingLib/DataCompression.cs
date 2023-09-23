@@ -18,21 +18,25 @@ namespace CCL
         /// <param name="uncompressedByteArray">Byte array to compress</param>
         public static byte[] CompressByteArray(byte[] uncompressedByteArray)
         {
-            try {
+            try
+            {
                 byte[] compressedBytes;
 
-                using (var uncompressedStream = new MemoryStream(uncompressedByteArray)) {
-                    using (var compressedStream = new MemoryStream()) {
-                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, true)) {
+                using (var uncompressedStream = new MemoryStream(uncompressedByteArray))
+                {
+                    using (var compressedStream = new MemoryStream())
+                    {
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, true))
                             uncompressedStream.CopyTo(compressorStream);
-                        }
+
                         compressedBytes = compressedStream.ToArray();
                     }
                 }
 
                 return compressedBytes;
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return null;
             }
         }
@@ -43,13 +47,16 @@ namespace CCL
         /// <param name="compressedByteArray">Byte array to decompress.</param>
         public static byte[] DecompressByteArray(byte[] compressedByteArray)
         {
-            try {
+            try
+            {
                 byte[] decompressedBytes;
 
                 var compressedStream = new MemoryStream(compressedByteArray);
 
-                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress)) {
-                    using (var decompressedStream = new MemoryStream()) {
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                {
+                    using (var decompressedStream = new MemoryStream())
+                    {
                         decompressorStream.CopyTo(decompressedStream);
 
                         decompressedBytes = decompressedStream.ToArray();
@@ -58,7 +65,8 @@ namespace CCL
 
                 return decompressedBytes;
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return null;
             }
         }
@@ -71,21 +79,25 @@ namespace CCL
         /// <param name="uncompressedString">String to compress</param>
         public static string CompressString(string uncompressedString, string returnStringOnError = "")
         {
-            try {
+            try
+            {
                 byte[] compressedBytes;
 
-                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString))) {
-                    using (var compressedStream = new MemoryStream()) {
-                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, true)) {
+                using (var uncompressedStream = new MemoryStream(Encoding.UTF8.GetBytes(uncompressedString)))
+                {
+                    using (var compressedStream = new MemoryStream())
+                    {
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, true))
                             uncompressedStream.CopyTo(compressorStream);
-                        }
+
                         compressedBytes = compressedStream.ToArray();
                     }
                 }
 
                 return Convert.ToBase64String(compressedBytes);
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return returnStringOnError;
             }
         }
@@ -96,13 +108,16 @@ namespace CCL
         /// <param name="compressedString">String to decompress.</param>
         public static string DecompressString(string compressedString, string returnStringOnError = "")
         {
-            try {
+            try
+            {
                 byte[] decompressedBytes;
 
                 var compressedStream = new MemoryStream(Convert.FromBase64String(compressedString));
 
-                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress)) {
-                    using (var decompressedStream = new MemoryStream()) {
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                {
+                    using (var decompressedStream = new MemoryStream())
+                    {
                         decompressorStream.CopyTo(decompressedStream);
 
                         decompressedBytes = decompressedStream.ToArray();
@@ -111,7 +126,8 @@ namespace CCL
 
                 return Encoding.UTF8.GetString(decompressedBytes);
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return returnStringOnError;
             }
         }

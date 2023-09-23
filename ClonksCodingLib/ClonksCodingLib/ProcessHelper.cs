@@ -48,7 +48,8 @@ namespace CCL
         /// </returns>
         public static int GetProcessWindowState(Process p)
         {
-            if (p.MainWindowHandle != IntPtr.Zero) {
+            if (p.MainWindowHandle != IntPtr.Zero)
+            {
                 WINDOWPLACEMENT placement = new WINDOWPLACEMENT();
                 GetWindowPlacement(p.MainWindowHandle, ref placement);
                 return placement.showCmd;

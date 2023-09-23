@@ -15,9 +15,12 @@ namespace CCL
 
         public static AResult<bool> CheckForInternetConnection(int timeoutMs = 10000, string urlOverride = null)
         {
-            try {
-                if (string.IsNullOrWhiteSpace(urlOverride)) {
-                    switch (CultureInfo.CurrentUICulture.Name) {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(urlOverride))
+                {
+                    switch (CultureInfo.CurrentUICulture.Name)
+                    {
                         case "fa-IR": // Iran
                             urlOverride = "http://www.aparat.com";
                             break;
@@ -36,27 +39,29 @@ namespace CCL
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                     return new AResult<bool>(null, true);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<bool>(ex, false);
             }
         }
 
         public static AResult<string> GetYouTubeVideoIDFromURL(string url)
         {
-            try {
-                if (!string.IsNullOrWhiteSpace(url)) {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(url))
+                {
                     string id = url;
 
                     // Check URL format
-                    if (id.Contains("youtube.com") && id.Contains("embed")) {   // Example: https://www.youtube.com/embed/M80K51DosFo?rel=0&autoplay=0&controls=1&fs=0&iv_load_policy=3
+                    if (id.Contains("youtube.com") && id.Contains("embed")) // Example: https://www.youtube.com/embed/M80K51DosFo?rel=0&autoplay=0&controls=1&fs=0&iv_load_policy=3
+                    {
                         id = id.Split('/')[4];
 
-                        if (id.Contains('?')) { // Contains parameters
+                        if (id.Contains('?')) // Contains parameters
                             return new AResult<string>(null, id.Split('?')[0]);
-                        }
-                        else {
+                        else
                             return new AResult<string>(null, id);
-                        }
                     }
                     if (id.Contains("youtube.com") && id.Contains("watch?v="))  // Example: https://www.youtube.com/watch?v=M80K51DosFo
                         return new AResult<string>(null, id.Split('=')[1]);
@@ -68,7 +73,8 @@ namespace CCL
 
                 return new AResult<string>(null, string.Empty);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<string>(ex, null);
             }
         }
@@ -111,9 +117,7 @@ namespace CCL
         public static Task<PingReply> GetPingAsync(string hostName)
         {
             using (Ping pingSender = new Ping())
-            {
                 return pingSender.SendPingAsync(hostName);
-            }
         }
 
         /// <summary>
@@ -129,14 +133,11 @@ namespace CCL
                 using (Ping pingSender = new Ping())
                 {
                     PingReply reply = pingSender.Send(hostName);
+
                     if (reply.Status == IPStatus.Success)
-                    {
                         return new AResult<long>(null, reply.RoundtripTime);
-                    }
                     else
-                    {
                         return new AResult<long>(null, -1);
-                    }
                 }
             }
             catch (Exception ex)

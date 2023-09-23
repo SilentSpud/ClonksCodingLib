@@ -45,13 +45,16 @@ namespace CCL
         /// <returns>A <see cref="AResult{T}"/> object that contains information if the operation failed or not. Returns a <see cref="byte"/> array if successful.</returns>
         public static AResult<byte[]> GetByteArray(Stream input)
         {
-            try {
-                using (MemoryStream ms = new MemoryStream()) {
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
                     input.CopyTo(ms);
                     return new AResult<byte[]>(null, ms.ToArray());
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<byte[]>(ex, null);
             }
         }
@@ -63,14 +66,16 @@ namespace CCL
         /// <returns>A <see cref="AResult{T}"/> object that contains information if the operation failed or not. Returns a <see cref="string"/> if successful.</returns>
         public static AResult<string> GetFileVersion(string fileName)
         {
-            try {
+            try
+            {
                 string version = FileVersionInfo.GetVersionInfo(fileName).FileVersion;
                 if (!string.IsNullOrEmpty(version))
                     return new AResult<string>(null, version.Replace(",", "."));
 
                 return new AResult<string>(null, string.Empty);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<string>(ex, null);
             }
         }
@@ -86,16 +91,20 @@ namespace CCL
         /// <returns>A <see cref="AResult{T}"/> object that contains information if the operation failed or not. Returns an MD5 Hash <see cref="string"/> if successful.</returns>
         public static AResult<string> GetMD5StringFromFolder(string folder, List<string> ignoredFiles = null)
         {
-            try {
+            try
+            {
                 List<string> files = Directory.GetFiles(folder, "*.*", SearchOption.TopDirectoryOnly).OrderBy(p => p).ToList();
-                using (MD5 md5 = MD5.Create()) {
+                using (MD5 md5 = MD5.Create())
+                {
 
                     // Generate hash from all files in directory
-                    for (int i = 0; i < files.Count; i++) {
+                    for (int i = 0; i < files.Count; i++)
+                    {
                         string file = files[i];
 
                         // There are files to be ignored
-                        if (ignoredFiles != null) {
+                        if (ignoredFiles != null)
+                        {
                             if (ignoredFiles.Contains(Path.GetFileName(file).ToLower()))
                                 continue;
                         }
@@ -109,19 +118,18 @@ namespace CCL
                         byte[] contentBytes = File.ReadAllBytes(file);
                         if (contentBytes == null) return new AResult<string>(new ArgumentNullException("contentBytes was null."), null);
 
-                        if (i == (files.Count - 1)) {
+                        if (i == (files.Count - 1))
                             md5.TransformFinalBlock(contentBytes, 0, contentBytes.Length);
-                        }
-                        else {
+                        else
                             md5.TransformBlock(contentBytes, 0, contentBytes.Length, contentBytes, 0);
-                        }
 
                     }
 
                     return new AResult<string>(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<string>(ex, null);
             }
         }
@@ -133,8 +141,10 @@ namespace CCL
         /// <returns>A <see cref="AResult{T}"/> object that contains information if the operation failed or not. Returns an MD5 Hash <see cref="string"/> if successful.</returns>
         public static AResult<string> GetMD5StringFromFile(string file)
         {
-            try {
-                using (MD5 md5 = MD5.Create()) {
+            try
+            {
+                using (MD5 md5 = MD5.Create())
+                {
                     byte[] contentBytes = File.ReadAllBytes(file);
                     if (contentBytes == null) return new AResult<string>(new ArgumentNullException("contentBytes was null."), null);
 
@@ -143,7 +153,8 @@ namespace CCL
                     return new AResult<string>(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<string>(ex, null);
             }
         }
@@ -178,6 +189,18 @@ namespace CCL
             int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             double num = Math.Round(bytes / Math.Pow(1024, place), 1);
             return new AFileSize((long)(Math.Sign(byteCount) * num), FileSizesStrArr[place]);
+        }
+
+        /// <summary>
+        /// Opens the Windows File Explorer and selects the target File.
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void OpenDirectoryAndSelectTargetFile(string filePath)
+        {
+            ProcessStartInfo info = new ProcessStartInfo();
+            info.FileName = "explorer";
+            info.Arguments = string.Format("/e, /select, \"{0}\"", filePath);
+            Process.Start(info);
         }
 
     }

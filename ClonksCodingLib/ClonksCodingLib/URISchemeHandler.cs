@@ -11,7 +11,8 @@ namespace CCL
 
         public static AResult<bool> Register(string protocolName, string executablePath)
         {
-            try {
+            try
+            {
                 RegistryKey regKey = Registry.ClassesRoot.CreateSubKey(protocolName);
 
                 regKey.CreateSubKey("DefaultIcon").SetValue(null, string.Format("{0}{1},1{0}", (char)34, executablePath));
@@ -24,17 +25,20 @@ namespace CCL
 
                 return new AResult<bool>(null, true);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<bool>(ex, false);
             }
         }
         public static AResult<bool> Unregister(string protocolName)
         {
-            try {
+            try
+            {
                 Registry.ClassesRoot.DeleteSubKeyTree(protocolName, false);
                 return new AResult<bool>(null, true);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new AResult<bool>(ex, false);
             }
         }

@@ -1,0 +1,24 @@
+name: Publish Package
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Pack
+      run: dotnet pack --configuration Release /p:Platform="Any CPU" --output .
+
+      # Push to Nuget if NUGET_KEY is set
+    - name: Push to NuGet
+      env: 
+        nuget_key: ${{ secrets.NUGET_KEY }}
+      if: ${{ env.nuget_key != '' }}
+      run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
